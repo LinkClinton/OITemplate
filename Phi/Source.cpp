@@ -28,8 +28,6 @@ void Initalize() {
 }
 
 int main() {
-	freopen("gcd_extreme.in", "r", stdin);
-	freopen("gcd_extreme.out", "w", stdout);
 	Get(MAX - 10000);
 	while (true) {
 		Initalize();
