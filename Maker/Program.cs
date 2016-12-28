@@ -17,21 +17,19 @@ namespace Maker
         {
             OISharp.Writer.Initalize(@"C:\OI\Template\Template\T.in");
 
-            int N = 500;
-            int M = 7;
+            int N = 20;
+            int M = 50;
+
             OISharp.Writer.ShowLine(N + " " + M);
-            for (int i = 1; i <= N; i++)
+
+            for (int i = 1; i <= M; i++)
             {
-                for (int j = 1; j <= M; j++)
-                {
-                    OISharp.Writer.Show(data.Next(-500, 500) + " ");
-                }
-                OISharp.Writer.ShowLine("");
+                int u = data.Next(1, N);
+                int v = data.Next(1, N);
+                OISharp.Writer.ShowLine(u + " " + v);
             }
 
             OISharp.Writer.Flush();
-
-         
 
         }
     }

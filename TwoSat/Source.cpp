@@ -281,7 +281,7 @@ void Initalize() {
 	for (int i = 1; i <= M; i++) {
 		int x, y;
 		scanf("%d %d", &x, &y);
-		TwoSat::Add(x - 1, y - 1);
+		TwoSatM::Add(x - 1, y - 1);
 	}
 }
 
