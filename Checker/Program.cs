@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 using OISharp;
 
@@ -30,9 +31,7 @@ namespace Checker
 
         static void Main(string[] args)
         {
-            ReadInput();
-            ReadOutPut();
-
+            BigInteger big = new BigInteger();
             
         }
     }

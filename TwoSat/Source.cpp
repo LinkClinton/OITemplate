@@ -285,10 +285,7 @@ void Initalize() {
 	}
 }
 
-int main() {
-	Initalize();
-	TwoSat::Main();
-}
+
 int main() {
 
 }

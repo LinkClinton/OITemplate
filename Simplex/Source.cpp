@@ -30,7 +30,7 @@ namespace Simplex {
 		b[M + 1] += tmp*b[d];
 		std::swap(c[e], c[d + N]);
 	}
-
+	
 	void Main() {
 		while (true) {
 			int d = 0;

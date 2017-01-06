@@ -16,17 +16,17 @@ namespace Maker
         static void Main(string[] args)
         {
             OISharp.Writer.Initalize(@"C:\OI\Template\Template\T.in");
+            
+            int N = 100;
 
-            int N = 20;
-            int M = 50;
+            OISharp.Writer.ShowLine(N.ToString());
 
-            OISharp.Writer.ShowLine(N + " " + M);
-
-            for (int i = 1; i <= M; i++)
+            for (int i = 1; i <= N; i++)
             {
-                int u = data.Next(1, N);
-                int v = data.Next(1, N);
-                OISharp.Writer.ShowLine(u + " " + v);
+                int u = data.Next(1, 10);
+                int v = data.Next(1, 10);
+                int d = data.Next(1, Math.Min(u, v));
+                OISharp.Writer.ShowLine(u + " " + v + " " + d);
             }
 
             OISharp.Writer.Flush();

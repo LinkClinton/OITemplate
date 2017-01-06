@@ -15,6 +15,8 @@ namespace OISharp
         public static void Initalize(string path)
         {
             IsFile = true;
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
             writer = new System.IO.StreamWriter(path);
         }
 
