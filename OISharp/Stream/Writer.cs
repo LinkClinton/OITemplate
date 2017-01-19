@@ -25,14 +25,14 @@ namespace OISharp
             IsFile = false;
         }
 
-        public static void Show(string str)
+        public static void Write(string str)
         {
             if (IsFile)
                 writer.Write(str);
             else Console.Write(str);
         }
 
-        public static void ShowLine(string str)
+        public static void WriteLine(string str)
         {
             if (IsFile)
                 writer.WriteLine(str);

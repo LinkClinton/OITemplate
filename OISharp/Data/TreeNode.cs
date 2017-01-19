@@ -51,9 +51,9 @@ namespace OISharp.Data
         public void ShowLine()
         {
             if (kind == TreeValue.Edge)
-                Writer.ShowLine(id + " " + parent.id + " " + n_value);
+                Writer.WriteLine(id + " " + parent.id + " " + n_value);
             else
-                Writer.ShowLine(id + " " + parent.id);
+                Writer.WriteLine(id + " " + parent.id);
         }
 
         public override string ToString()

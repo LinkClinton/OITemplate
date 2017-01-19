@@ -69,26 +69,26 @@ namespace OISharp.Data
             get { return treekind; }
         }
         
-        public void Show()
+        public void Write()
         {
             if (Kind == TreeValue.Point)
                 for (int i = 0; i < node.Length; i++)
-                    Writer.Show(node[i].Point + " ");
+                    Writer.Write(node[i].Point + " ");
 
-            Writer.ShowLine("");
+            Writer.WriteLine("");
 
             for (int i = 0; i < node.Length; i++)
-                Writer.ShowLine(node[i].ToString());
+                Writer.WriteLine(node[i].ToString());
         }
 
-        public void ShowLine()
+        public void WriteLine()
         {
             if (Kind == TreeValue.Point)
                 for (int i = 0; i < node.Length; i++)
-                    Writer.ShowLine(node[i].Point.ToString());
+                    Writer.WriteLine(node[i].Point.ToString());
 
             for (int i = 0; i < node.Length; i++)
-                Writer.ShowLine(node[i].ToString());
+                Writer.WriteLine(node[i].ToString());
 
         }
         

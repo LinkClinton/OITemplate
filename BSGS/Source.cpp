@@ -5,7 +5,7 @@ m=sqrt(p)
 
 k=cm+q
 
-a^q = b*a^cm*-1 mod p
+a^q = b*a^(cm*-1) mod p
 
 Ã¶¾Ùq
 

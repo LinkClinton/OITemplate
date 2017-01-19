@@ -16,21 +16,38 @@ namespace Maker
         static void Main(string[] args)
         {
             OISharp.Writer.Initalize(@"C:\OI\Template\Template\T.in");
-            
-            int N = 100;
 
-            OISharp.Writer.ShowLine(N.ToString());
+            int N = 1000;
 
-            for (int i = 1; i <= N; i++)
+            OISharp.Writer.WriteLine(N.ToString());
+
+            OISharp.Data.Tree tree = new OISharp.Data.Tree(N, OISharp.Data.TreeValue.Edge, 1, 10000);
+
+            tree.WriteLine();
+
+            int M = 1000;
+
+            OISharp.Writer.WriteLine(M.ToString());
+
+            for (int i = 1; i <= M; i++)
             {
-                int u = data.Next(1, 10);
-                int v = data.Next(1, 10);
-                int d = data.Next(1, Math.Min(u, v));
-                OISharp.Writer.ShowLine(u + " " + v + " " + d);
+                int t = data.Next(1, N - 2);
+                t = N - 10;
+                bool[] vis = new bool[N + 1];
+                vis[1] = true;
+                OISharp.Writer.Write(t + " ");
+
+                for (int j = 1; j <= t; j++)
+                {
+                    int v = data.Next(1, N);
+                    while (vis[v]) v = data.Next(1, N);
+                    vis[v] = true;
+                    OISharp.Writer.Write(v + " ");
+                }
+                OISharp.Writer.WriteLine("");
             }
 
             OISharp.Writer.Flush();
-
         }
     }
 }

@@ -21,6 +21,7 @@ void Get(int N) {
 		}
 		for (int j = 1; j <= prime[0]; j++) {
 			if (i*prime[j] > N) break;
+			IsPrime[i*prime[j]] = false;
 			if (i%prime[j] == 0) {
 				mu[i*prime[j]] = 0;
 				phi[i*prime[j]] = phi[i] * prime[j];

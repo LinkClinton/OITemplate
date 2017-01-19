@@ -27,16 +27,16 @@ namespace OISharp.Data
                 arr[i] = data.Next(min_value, max_value + 1);
         }
 
-        public void Show()
+        public void Write()
         {
             for (int i = 0; i < arr.Length; i++)
-                Writer.Show(arr[i] + " ");
+                Writer.Write(arr[i] + " ");
         }
 
-        public void ShowLine()
+        public void WriteLine()
         {
             for (int i = 0; i < arr.Length; i++)
-                Writer.ShowLine(arr[i].ToString());
+                Writer.WriteLine(arr[i].ToString());
         }
 
         public int[] Source
