@@ -13,7 +13,6 @@ namespace NTT {
 	const int_t P = 1004535809;
 	const int_t g = 3;
 
-	int_t pow[MAX];
 	
 	int_t fast_pow(int_t x, int_t n) {
 		if (n == 0) return 1;
@@ -31,9 +30,7 @@ namespace NTT {
 	}
 
 	void Initalize(int n) {
-		pow[0] = 1;
-		for (int i = 1; i <= n; i++)
-			pow[i] = pow[i - 1] * g;
+	
 	}
 
 	std::vector<int> index;
