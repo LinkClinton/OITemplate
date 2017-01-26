@@ -1,95 +1,67 @@
-﻿#include"StandSource.hpp"
-
-#include<algorithm>
-#include<iostream>
+﻿#include<iostream>
 #include<cstring>
+#include<complex>
 #include<cstdio>
+#include<vector>
 
-#define MAX 12000
+typedef std::complex<double> T;
 
-int v[MAX];
-int N, M;
+namespace FFT {
 
-char c[MAX];
-char ct[MAX];
-char vc[MAX];
+	std::vector<int> Index;
+	std::vector<int> Index_Temp;
 
-void Initalize() {
-	std::ios::sync_with_stdio(false);
-	std::cin >> N >> M;
-	std::cin >> c;
-	for (int i = 0; i < N; i++) {
-		if (c[i] == '(') v[i + 1] = 1;
-		else v[i + 1] = -1;
+	void GetIndex(size_t l, size_t r) {
+		if (l == r) return;
+		Index_Temp.clear();
+
+		size_t mid = (l + r) >> 1;
+		for (size_t i = l; i <= mid; i++)
+			Index_Temp.push_back(Index[l + (((i - l) * 2) ^ 1)]);
+		for (size_t i = l; i <= mid; i++)
+			Index[i] = Index[l + (i - l) * 2];
+		for (size_t i = mid + 1; i <= r; i++)
+			Index[i] = Index_Temp[i - mid - 1];
+
+		GetIndex(l, mid); GetIndex(mid + 1, r);
 	}
-}
 
-void Replace(int l, int r, int value) {
-	for (int i = l; i <= r; i++)
-		v[i] = value;
-}
+	void AsIndex(std::vector<T> &result) {
+		Index.clear();
+		Index.resize(result.size());
 
-void Invert(int l, int r) {
-	for (int i = l; i <= r; i++)
-		v[i] = -v[i];
-}
+		for (size_t i = 0; i < Index.size(); i++)
+			Index[i] = i;
 
-void Swap(int l, int r) {
-	int mid = (l + r) >> 1;
-	for (int i = l; i <= mid; i++)
-		std::swap(v[i], v[r - i + l]);
-}
+		GetIndex(0, Index.size() - 1);
 
-int  Query(int l, int r) {
-	int left_min = 0;
-	int right_max = 0;
-	int sum = 0;
-	for (int i = l; i <= r; i++) {
-		sum += v[i];
-		left_min = std::min(left_min, sum);
+		std::vector<T> temp = result;
+		for (size_t i = 0; i < result.size(); i++)
+			result[i] = temp[Index[i]];
 	}
-	sum = 0;
-	for (int i = r; i >= l; i--) {
-		sum += v[i];
-		right_max = std::max(right_max, sum);
+
+	const double PI = acos(-1);
+
+	void DFT(std::vector<T>& result, int flag) {
+		AsIndex(result);
+		for (size_t i = 1; i < result.size(); i << 1) {
+			size_t length = i << 1;
+			T Wn = T(cos(2.0*PI / length), sin(2.0*PI / length*flag));
+			for (size_t j = 0; j < result.size(); j += length) {
+				T W = T(1, 0);
+				for (size_t k = 0; k < i; k++) {
+					T x = result[j + k];
+					T y = W*result[j + k + i];
+					result[j + k] = x + y;
+					result[j + k + i] = x - y;
+					W = W*Wn;
+				}
+			}
+		}
+		if (flag == -1) for (size_t i = 0; i < result.size(); i++) result[i] /= result.size();
 	}
-	return (std::abs(left_min) + 1) / 2 + (std::abs(right_max) + 1) / 2;
 }
 
 int main() {
-	Initalize();
-	for (int i = 1; i <= M; i++) {
-		std::cin >> ct;
-		switch (ct[0])
-		{
-		case 'R': {
-			int l, r, val;
-			std::cin >> l >> r >> vc;
-			if (vc[0] == '(') val = 1; else val = -1;
-			Replace(l, r, val);
-			break;
-		}
-		case 'S': {
-			int l, r;
-			std::cin >> l >> r;
-			Swap(l, r);
-			break;
-		}
-		case 'I': {
-			int l, r;
-			std::cin >> l >> r;
-			Invert(l, r);
-			break;
-		}
-		case 'Q': {
-			int l, r;
-			std::cin >> l >> r;
-			std::cout << Query(l, r) << std::endl;
-			break;
-		}
-		default:
-			break;
-		}
-	}
 }
-
+	
