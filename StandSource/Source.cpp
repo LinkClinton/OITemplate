@@ -1,67 +1,43 @@
-﻿#include<iostream>
+﻿#include<cstdio>
+#include<cstdlib>
 #include<cstring>
-#include<complex>
-#include<cstdio>
-#include<vector>
+using namespace std;
 
-typedef std::complex<double> T;
+#define maxn (230)
+int n, r, d[maxn]; double p[maxn], P[maxn], ans, f[maxn][maxn], ci[maxn][maxn];
 
-namespace FFT {
-
-	std::vector<int> Index;
-	std::vector<int> Index_Temp;
-
-	void GetIndex(size_t l, size_t r) {
-		if (l == r) return;
-		Index_Temp.clear();
-
-		size_t mid = (l + r) >> 1;
-		for (size_t i = l; i <= mid; i++)
-			Index_Temp.push_back(Index[l + (((i - l) * 2) ^ 1)]);
-		for (size_t i = l; i <= mid; i++)
-			Index[i] = Index[l + (i - l) * 2];
-		for (size_t i = mid + 1; i <= r; i++)
-			Index[i] = Index_Temp[i - mid - 1];
-
-		GetIndex(l, mid); GetIndex(mid + 1, r);
+inline void dp()
+{
+	for (int i = 1; i <= n; ++i)
+	{
+		ci[i][0] = 1;
+		for (int j = 1; j <= r; ++j) ci[i][j] = ci[i][j - 1] * (1 - p[i]);
 	}
-
-	void AsIndex(std::vector<T> &result) {
-		Index.clear();
-		Index.resize(result.size());
-
-		for (size_t i = 0; i < Index.size(); i++)
-			Index[i] = i;
-
-		GetIndex(0, Index.size() - 1);
-
-		std::vector<T> temp = result;
-		for (size_t i = 0; i < result.size(); i++)
-			result[i] = temp[Index[i]];
-	}
-
-	const double PI = acos(-1);
-
-	void DFT(std::vector<T>& result, int flag) {
-		AsIndex(result);
-		for (size_t i = 1; i < result.size(); i << 1) {
-			size_t length = i << 1;
-			T Wn = T(cos(2.0*PI / length), sin(2.0*PI / length*flag));
-			for (size_t j = 0; j < result.size(); j += length) {
-				T W = T(1, 0);
-				for (size_t k = 0; k < i; k++) {
-					T x = result[j + k];
-					T y = W*result[j + k + i];
-					result[j + k] = x + y;
-					result[j + k + i] = x - y;
-					W = W*Wn;
-				}
+	memset(f, 0, sizeof(f)); memset(P, 0, sizeof(P));
+	f[0][r] = 1;
+	for (int i = 0; i < n; ++i)
+		for (int j = r; j >= r - i&&j >= 0; --j)
+		{
+			f[i + 1][j] += f[i][j] * ci[i + 1][j];
+			if (j)
+			{
+				double t = f[i][j] * (1 - ci[i + 1][j]);
+				f[i + 1][j - 1] += t; P[i + 1] += t;
 			}
 		}
-		if (flag == -1) for (size_t i = 0; i < result.size(); i++) result[i] /= result.size();
-	}
 }
 
-int main() {
+int main()
+{
+	int T; scanf("%d", &T);
+	while (T--)
+	{
+		scanf("%d %d", &n, &r);
+		for (int i = 1; i <= n; ++i) scanf("%lf %d", p + i, d + i);
+		dp(); ans = 0;
+		for (int i = 1; i <= n; ++i) ans += P[i] * d[i];
+		printf("%.10lf\n", ans);
+	}
+	fclose(stdin); fclose(stdout);
+	return 0;
 }
-	
