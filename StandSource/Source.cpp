@@ -1,85 +1,132 @@
-﻿#include<cstdio>
-#include<algorithm>
+﻿#include<iostream>
 #include<cstring>
+#include<cstdio>
+#include<vector>
 #include<cmath>
-using namespace std;
+#include<queue>
 
-const int N = 100010;
-struct node {
-	int x, y, a, b, id;
-	friend bool operator <(const node &a, const node &b) {
-		if (a.a == b.a) return a.b<b.b;
-		return a.a<b.a;
-	}
-	void init(int k) {
-		id = k; scanf("%d%d%d%d", &x, &y, &a, &b);
-	}
-}e[N], q[N], tmp[N];
-struct opt {
-	int x, y, f, da, db, sz;
-}op[N];
-int ans[N], f[N], da[N], db[N], sz[N], Q, n, m, top, tot, x, y, S;
+#define INF 1000000007
+#define MAX 1000
 
-bool cmp(const node &a, const node &b) {
-	if (a.b == b.b) return a.a<b.a;
-	return a.b<b.b;
-}
-int find(int x) {
-	return f[x] == x ? x : find(f[x]);
-}
-void merge(int x, int y, int a, int b) {
-	x = find(x); y = find(y);
-	if (sz[x]>sz[y]) swap(x, y);
-	op[++tot].x = x; op[tot].da = da[y]; op[tot].db = db[y];
-	op[tot].y = y; op[tot].f = f[x]; op[tot].sz = sz[y];
-	if (x == y) {
-		da[x] = max(da[x], a);
-		db[x] = max(db[x], b);
-		return;
-	}
-	f[x] = y; sz[y] += sz[x];
-	da[y] = max(da[y], max(da[x], a));
-	db[y] = max(db[y], max(db[x], b));
-}
-void Return() {
-	for (; tot; tot--) {
-		f[op[tot].x] = op[tot].f;
-		db[op[tot].y] = op[tot].db;
-		da[op[tot].y] = op[tot].da;
-		sz[op[tot].y] = op[tot].sz;
-	}
-}
-int main() {
-	freopen("multiple.in", "r", stdin);
-	freopen("multiple.out", "w", stdout);
-	scanf("%d%d", &n, &m);
-	for (int i = 1; i <= m; i++) e[i].init(i);
-	sort(e + 1, e + 1 + m);
-	S = (int)sqrt(m);
-	scanf("%d", &Q);
-	for (int i = 1; i <= Q; i++) q[i].init(i);
-	sort(q + 1, q + 1 + Q, cmp);
-	for (int i = 1; i <= m; i += S) {
-		top = 0;
-		for (int j = 1; j <= Q; j++)
-			if (q[j].a >= e[i].a && (i + S>m || q[j].a<e[i + S].a))
-				tmp[++top] = q[j];
-		sort(e + 1, e + i, cmp);
-		for (int j = 1; j <= n; j++) f[j] = j, sz[j] = 1, da[j] = db[j] = -1;
-		for (int j = 1, k = 1; j <= top; j++) {
-			for (; k<i&&e[k].b <= tmp[j].b; k++)
-				merge(e[k].x, e[k].y, e[k].a, e[k].b);
-			tot = 0;
-			for (int l = i; l<i + S&&l <= m; l++)
-				if (e[l].a <= tmp[j].a&&e[l].b <= tmp[j].b)
-					merge(e[l].x, e[l].y, e[l].a, e[l].b);
-			x = find(tmp[j].x); y = find(tmp[j].y);
-			ans[tmp[j].id] = x == y&&da[x] == tmp[j].a&&db[x] == tmp[j].b;
-			Return();
+int map[MAX][MAX];
+char graph[40][40];
+
+int m, n, k, h;
+int p_count;
+int p[MAX];
+
+int all = 0;
+
+int  dis[MAX];
+bool v[MAX];
+
+int ans = 0;
+
+namespace SPFA {
+
+	void Main(int Start) {
+		int nm = n*m;
+		for (int i = 1; i <= nm; i++) {
+			dis[i] = INF;
+			v[i] = false;
+		}
+
+		std::queue<int> t;
+		dis[Start] = 0;
+		v[Start] = true;
+
+		t.push(Start);
+
+		while (!t.empty()) {
+			int p = t.front(); t.pop();
+			v[p] = false;
+
+			for (int to = 1; to <= nm; to++) {
+				if (dis[to] > dis[p] + map[p][to]) {
+					dis[to] = dis[p] + map[p][to];
+					if (v[to] == false) {
+						v[to] = true; t.push(to);
+					}
+				}
+			}
+
 		}
 	}
-	for (int i = 1; i <= Q; i++)
-		if (ans[i]) puts("Yes");
-		else puts("No");
-		return 0;
+
+}
+
+int getID(int x, int y) {
+	return (x - 1)*n + y;
+}
+
+void make_road(int i, int j) {
+	int real_j = j - 1;
+	if (i != 1 && graph[i - 1][real_j] != '#') map[getID(i, j)][getID(i - 1, j)] = 0;
+	if (i != m && graph[i + 1][real_j] != '#') map[getID(i, j)][getID(i + 1, j)] = 0;
+	if (j != 1 && graph[i][real_j - 1] != '#') map[getID(i, j)][getID(i, j - 1)] = 0;
+	if (j != n && graph[i][real_j + 1] != '#') map[getID(i, j)][getID(i, j + 1)] = 0;
+}
+
+void make_damage(int i, int j, int damage) {
+	if (i != 1) map[getID(i - 1, j)][getID(i, j)] = damage;
+	if (i != m) map[getID(i + 1, j)][getID(i, j)] = damage;
+	if (j != 1) map[getID(i, j - 1)][getID(i, j)] = damage;
+	if (j != n) map[getID(i, j + 1)][getID(i, j)] = damage;
+}
+
+void make_state(int x) {
+	int damage[10];
+	for (int i = 1; i <= k; i++) {
+		damage[i] = (x >> (i - 1) & 1);
+	}
+	for (int i = 1; i <= m; i++) {
+		for (int j = 1; j <= n; j++) {
+			if ((graph[i][j - 1] - 'A' + 1) >= 1 && (graph[i][j - 1] - 'A' + 1) <= k) {
+				make_damage(i, j, damage[graph[i][j - 1] - 'A' + 1]);
+			}
+		}
+	}
+}
+
+int Start;
+std::vector<int> End;
+
+void readData() {
+	scanf("%d %d %d %d", &m, &n, &k, &h);
+	for (int i = 1; i <= m; i++) {
+		scanf("%s", graph[i]);
+	}
+	for (int i = 1; i <= n*m; i++) {
+		for (int j = 1; j <= n*m; j++) {
+			if (i == j) continue; map[i][j] = INF;
+		}
+	}
+	for (int i = 1; i <= m; i++) {
+		for (int j = 1; j <= n; j++) {
+			if (graph[i][j - 1] != '#') {
+				make_road(i, j);
+				if (graph[i][j - 1] == '$') Start = getID(i, j);
+				if (graph[i][j - 1] == '@') End.push_back(getID(i, j));
+			}
+		}
+	}
+
+	p_count = (int)std::pow(2, k);
+
+	for (int i = 0; i < p_count; i++) {
+		scanf("%d", &p[i]);
+		all += p[i];
+
+		make_state(i);
+		SPFA::Main(Start);
+		for (size_t j = 0; j < End.size(); j++) {
+			if (dis[End[j]] < h - 1) { ans += p[i]; break; }
+		}
+	}
+}
+
+int main() {
+	readData();
+	double Ans = (double)ans / (double)all;
+	printf("%lf\n", Ans);
 }

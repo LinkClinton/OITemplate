@@ -1,7 +1,7 @@
 #pragma once
 
 #include<cstdio>
-
+#define DEBUG
 class input {
 public:
 	static void Open() {
@@ -21,4 +21,5 @@ public:
 		fclose(stdout);
 	}
 };
+
 

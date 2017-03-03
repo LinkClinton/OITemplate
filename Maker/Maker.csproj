@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{28673F01-042D-417B-9CF2-323236A6CAB6}</ProjectGuid>
+    <ProjectGuid>{14B0BE20-3AC4-450F-8E00-351DE81B89C2}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Maker</RootNamespace>
     <AssemblyName>Maker</AssemblyName>
@@ -47,12 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OISharp\OISharp.csproj">
-      <Project>{0b1d0e66-93f5-485e-a346-07589c711442}</Project>
-      <Name>OISharp</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
